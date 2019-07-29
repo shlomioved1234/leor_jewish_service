@@ -59,6 +59,7 @@ def scheduled_job():
     J_message = timesJerusalem(keys)
     send_text(NY_message, '+15166039008', 'New York')
     send_text(J_message, '+15166039008', 'Jerusalem')
+    print('Messages sent successfully')
 
 
 @sched.scheduled_job('interval', seconds = 10)
