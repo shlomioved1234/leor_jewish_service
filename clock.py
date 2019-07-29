@@ -29,6 +29,7 @@ def timesNewYork(keys):
     today = d.strftime('%m/%d/%Y')
     jewish_times = requests.get("https://wyrezmanim.herokuapp.com/api/zmanim?timezone=America/New_York&latitude=40.7128&longitude=-74.0060&date=%s&elevation=33&format=json" % (today))
     message = ''
+    message += 'New York\n'
     message += 'Date: ' + today + '\n' + '\n'
     for key in keys:
         message += key + ': ' + jewish_times.json()[key] + '\n'
