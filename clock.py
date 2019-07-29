@@ -48,6 +48,11 @@ def scheduled_job():
     message += jewish_times.json()['Candle Lighting']
     send_text(message, '+15166039008')
 
+@sched.scheduled_job('interval', seconds = 5)
+def timed_job():
+    print("I'm alive")
+
+
 sched.start()
 
 
