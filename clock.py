@@ -35,6 +35,16 @@ def timesNewYork(keys):
         message += key + ': ' + jewish_times.json()[key] + '\n'
     return(message)
 
+def timesJerusalem(keys):
+    d = datetime.datetime.today()
+    today = d.strftime('%m/%d/%Y')
+    jewish_times = requests.get("https://wyrezmanim.herokuapp.com/api/zmanim?timezone=Asia/Jerusalem&latitude=31.7683&longitude=35.2137&date=%s&elevation=800&format=json" % (today))
+    message = ''
+    message += 'Jerusalem\n'
+    message += 'Date: ' + today + '\n' + '\n'
+    for key in keys:
+        message += key + ': ' + jewish_times.json()[key] + '\n'
+    return(message)
 
 
 sched = BlockingScheduler()
@@ -45,8 +55,11 @@ def scheduled_job():
             'SofZmanShemaMGA','SofZmanShmaGra', 'SofZmanShema3HoursBeforeChatzos',
             'SofZmanTefilahGra', 'Chatzos', 'MinchaGedolah', 'MinchaKetana', 'PlagHamincha',
             'Shkia','BainHashmashosRabeinuTam2Stars', 'Tzais', 'CandleLighting']
-    message = timesNewYork(keys)
-    send_text(message, '+15166039008')
+    NY_message = timesNewYork(keys)
+    J_message = timesJerusalem(keys)
+    send_text(NY_message, '+15166039008')
+    send_text(J_message, '+15166039008')
+
 
 @sched.scheduled_job('interval', seconds = 10)
 def timed_job():
