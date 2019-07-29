@@ -46,9 +46,6 @@ def scheduled_job():
     message += jewish_times.json()['BainHashmashosRabeinuTam2Stars']
     message += jewish_times.json()['Tzais']
     message += jewish_times.json()['Candle Lighting']
-
-for key, value in jewish_times.json().items():
-        message += key + ': ' + value + '\n'
     send_text(message, '+15166039008')
 
 sched.start()
