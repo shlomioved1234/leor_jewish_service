@@ -5,10 +5,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def send_text(message):
+def send_text(message,number):
     email = "unibidinc@gmail.com"
     pas = "lera apiq jhgi wuko"
-    sms_gateway = '+15166039008@tmomail.net'
+    sms_gateway = '%s@tmomail.net' % number
     smtp = "smtp.gmail.com"
     port = 587
     server = smtplib.SMTP(smtp,port)
@@ -32,19 +32,25 @@ def scheduled_job():
     today = d.strftime('%m/%d/%Y')
     jewish_times = requests.get("https://wyrezmanim.herokuapp.com/api/zmanim?timezone=America/New_York&latitude=40&longitude=-73&date=%s&elevation=50&format=json" % (today))
     message = ''
-    for key, value in jewish_times.json().items():
-        message += key + ': ' + value + '\n'
-    send_text(message)
+    message += jewish_times.json()['SolarMidnight']
+    message += jewish_times.json()['Alos']
+    message += jewish_times.json()['Sunrise']
+    message += jewish_times.json()['SofZmanTefilahGra']
+    message += jewish_times.json()['SofZmanShemaMGA']
+    message += jewish_times.json()['SofZmanShemaGra']
+    message += jewish_times.json()['SofZmanShema3HoursBeforeChatzos']
+    message += jewish_times.json()['Chatzos']
+    message += jewish_times.json()['MinchaGedolah']
+    message += jewish_times.json()['Mincha Ketana']
+    message += jewish_times.json()['Shkia']
+    message += jewish_times.json()['BainHashmashosRabeinuTam2Stars']
+    message += jewish_times.json()['Tzais']
+    message += jewish_times.json()['Candle Lighting']
 
-@sched.scheduled_job('interval', minutes=1)
-def timed_job():
-    d = datetime.datetime.today()
-    today = d.strftime('%m/%d/%Y')
-    jewish_times = requests.get("https://wyrezmanim.herokuapp.com/api/zmanim?timezone=America/New_York&latitude=40&longitude=-73&date=%s&elevation=50&format=json" % (today))
-    message = ''
-    for key, value in jewish_times.json().items():
+for key, value in jewish_times.json().items():
         message += key + ': ' + value + '\n'
-    send_text(message)
+    send_text(message, '+15166039008')
+
 sched.start()
 
 
