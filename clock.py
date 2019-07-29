@@ -24,28 +24,27 @@ def send_text(message,number):
     server.sendmail(email,sms_gateway,sms)
     server.quit()
 
+def timesNewYork(keys):
+    d = datetime.datetime.today()
+    today = d.strftime('%m/%d/%Y')
+    jewish_times = requests.get("https://wyrezmanim.herokuapp.com/api/zmanim?timezone=America/New_York&latitude=40.7128&longitude=-74.0060&date=%s&elevation=33&format=json" % (today))
+    message = ''
+    message += 'Date: ' + today + '\n' + '\n'
+    for key in keys:
+        message += key + ': ' + jewish_times.json()[key] + '\n'
+    return(message)
+
+
+
 sched = BlockingScheduler()
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=3)
 def scheduled_job():
-    d = datetime.datetime.today()
-    today = d.strftime('%m/%d/%Y')
-    jewish_times = requests.get("https://wyrezmanim.herokuapp.com/api/zmanim?timezone=America/New_York&latitude=40&longitude=-73&date=%s&elevation=50&format=json" % (today))
-    message = ''
-    message += jewish_times.json()['SolarMidnight']
-    message += jewish_times.json()['Alos']
-    message += jewish_times.json()['Sunrise']
-    message += jewish_times.json()['SofZmanTefilahGra']
-    message += jewish_times.json()['SofZmanShemaMGA']
-    message += jewish_times.json()['SofZmanShemaGra']
-    message += jewish_times.json()['SofZmanShema3HoursBeforeChatzos']
-    message += jewish_times.json()['Chatzos']
-    message += jewish_times.json()['MinchaGedolah']
-    message += jewish_times.json()['Mincha Ketana']
-    message += jewish_times.json()['Shkia']
-    message += jewish_times.json()['BainHashmashosRabeinuTam2Stars']
-    message += jewish_times.json()['Tzais']
-    message += jewish_times.json()['Candle Lighting']
+    keys = ['SolarMidnight', 'Alos', 'Sunrise', 'SofZmanTefilahGra',
+            'SofZmanShemaMGA','SofZmanShmaGra', 'SofZmanShema3HoursBeforeChatzos',
+            'SofZmanTefilahGra', 'Chatzos', 'MinchaGedolah', 'MinchaKetana', 'PlagHamincha',
+            'Shkia','BainHashmashosRabeinuTam2Stars', 'Tzais', 'CandleLighting']
+    message = timesNewYork(keys)
     send_text(message, '+15166039008')
 
 @sched.scheduled_job('interval', seconds = 5)
