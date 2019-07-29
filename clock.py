@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 
 def send_text(message):
     email = "unibidinc@gmail.com"
-    pas = "Unibid123"
+    pas = "lera apiq jhgi wuko"
     sms_gateway = '+15166039008@tmomail.net'
     smtp = "smtp.gmail.com"
     port = 587
@@ -36,7 +36,7 @@ def scheduled_job():
         message += key + ': ' + value + '\n'
     send_text(message)
 
-@sched.scheduled_job('interval', minutes=3)
+@sched.scheduled_job('interval', minutes=1)
 def timed_job():
     d = datetime.datetime.today()
     today = d.strftime('%m/%d/%Y')
