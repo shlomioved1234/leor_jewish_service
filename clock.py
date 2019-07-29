@@ -47,9 +47,11 @@ def scheduled_job():
     message = timesNewYork(keys)
     send_text(message, '+15166039008')
 
-@sched.scheduled_job('interval', seconds = 5)
+@sched.scheduled_job('interval', seconds = 10)
 def timed_job():
     print("I'm alive")
+    print("Time is: " ,end='')
+    print(datetime.datetime.now())
 
 
 sched.start()
