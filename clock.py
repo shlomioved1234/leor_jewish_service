@@ -5,7 +5,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def send_text(message,number):
+def send_text(message,number, subject):
     email = "unibidinc@gmail.com"
     pas = "lera apiq jhgi wuko"
     sms_gateway = '%s@tmomail.net' % number
@@ -17,7 +17,7 @@ def send_text(message,number):
     msg = MIMEMultipart()
     msg['From'] = email
     msg['To'] = sms_gateway
-    msg['Subject'] = "JEWISH ZMANIM!!!!"
+    msg['Subject'] = subject
     body = message
     msg.attach(MIMEText(body, 'plain'))
     sms = msg.as_string()
@@ -57,8 +57,8 @@ def scheduled_job():
             'Shkia','BainHashmashosRabeinuTam2Stars', 'Tzais', 'CandleLighting']
     NY_message = timesNewYork(keys)
     J_message = timesJerusalem(keys)
-    send_text(NY_message, '+15166039008')
-    send_text(J_message, '+15166039008')
+    send_text(NY_message, '+15166039008', 'New York')
+    send_text(J_message, '+15166039008', 'Jerusalem')
 
 
 @sched.scheduled_job('interval', seconds = 10)
