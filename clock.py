@@ -62,12 +62,6 @@ def scheduled_job():
     print('Messages sent successfully')
 
 
-@sched.scheduled_job('interval', seconds = 10)
-def timed_job():
-    print("I'm alive")
-    print("Time is: " ,end='')
-    print(datetime.datetime.now())
-
 
 sched.start()
 
