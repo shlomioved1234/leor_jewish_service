@@ -4,8 +4,23 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import pyrebase
 
-def send_text(message,number, subject):
+
+def setup_db():
+    config = {
+    "apiKey": "AIzaSyAiHMVgcJ7H1TN9ulWt_njXG4oS-CgZEHo",
+        "authDomain": "leor-jewish-service.firebaseapp.com",
+        "databaseURL": "https://leor-jewish-service.firebaseio.com/",
+        "storageBucket": "leor-jewish-service.appspot.com"
+    }
+    firebase = pyrebase.initialize_app(config)
+    auth = firebase.auth()
+    user = auth.sign_in_with_email_and_password("unibidinc@gmail.com", "password")
+    db = firebase.database()
+    return(db)
+
+def send_text_tmobile(message,number, subject):
     email = "unibidinc@gmail.com"
     pas = "lera apiq jhgi wuko"
     sms_gateway = '%s@tmomail.net' % number
@@ -49,16 +64,13 @@ def timesJerusalem(keys):
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=3)
+@sched.scheduled_job('cron', day_of_week='sun-fri', hour=6)
 def scheduled_job():
-    keys = ['SolarMidnight', 'Alos', 'Sunrise', 'SofZmanTefilahGra',
-            'SofZmanShemaMGA','SofZmanShmaGra', 'SofZmanShema3HoursBeforeChatzos',
-            'SofZmanTefilahGra', 'Chatzos', 'MinchaGedolah', 'MinchaKetana', 'PlagHamincha',
-            'Shkia','BainHashmashosRabeinuTam2Stars', 'Tzais', 'CandleLighting']
+    keys = ['SolarMidnight', 'Alos', 'Sunrise', 'SofZmanShmaGra',
+            'SofZmanTefilahGra', 'Chatzos','MinchaGedolah', 'MinchaKetana',
+            'PlagHamincha','Shkia','BainHashmashosRabeinuTam2Stars', 'Tzais']
     NY_message = timesNewYork(keys)
-    J_message = timesJerusalem(keys)
-    send_text(NY_message, '+15166039008', 'New York')
-    send_text(J_message, '+15166039008', 'Jerusalem')
+    send_text_tmobile(NY_message, '+15166039008', 'New York')
     print('Messages sent successfully')
 
 
